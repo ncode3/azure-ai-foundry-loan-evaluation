@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import LoanEvaluation from "@/pages/LoanEvaluation";
 import EvaluationHistory from "@/pages/EvaluationHistory";
+import AISettings from "@/pages/AISettings";
 import AppHeader from "@/components/AppHeader";
 import SideNav from "@/components/SideNav";
 import Footer from "@/components/Footer";
@@ -39,6 +40,11 @@ function Router() {
       <Route path="/evaluation-history">
         <Layout>
           <EvaluationHistory />
+        </Layout>
+      </Route>
+      <Route path="/ai-settings">
+        <Layout>
+          <AISettings />
         </Layout>
       </Route>
       <Route>
