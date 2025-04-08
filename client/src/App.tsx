@@ -6,6 +6,8 @@ import NotFound from "@/pages/not-found";
 import LoanEvaluation from "@/pages/LoanEvaluation";
 import EvaluationHistory from "@/pages/EvaluationHistory";
 import AISettings from "@/pages/AISettings";
+import AzureIntegrations from "@/pages/AzureIntegrations";
+import Reports from "@/pages/Reports";
 import AppHeader from "@/components/AppHeader";
 import SideNav from "@/components/SideNav";
 import Footer from "@/components/Footer";
@@ -45,6 +47,16 @@ function Router() {
       <Route path="/ai-settings">
         <Layout>
           <AISettings />
+        </Layout>
+      </Route>
+      <Route path="/azure-integrations">
+        <Layout>
+          <AzureIntegrations />
+        </Layout>
+      </Route>
+      <Route path="/reports">
+        <Layout>
+          <Reports />
         </Layout>
       </Route>
       <Route>
