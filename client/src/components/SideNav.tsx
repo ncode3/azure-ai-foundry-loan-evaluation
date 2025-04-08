@@ -7,27 +7,32 @@ export default function SideNav() {
     { 
       path: "/", 
       label: "Loan Evaluation", 
-      icon: "assessment"
+      icon: "assessment",
+      enabled: true
     },
     { 
       path: "/evaluation-history", 
       label: "Evaluation History", 
-      icon: "history"
+      icon: "history",
+      enabled: true
     },
     { 
       path: "/ai-settings", 
       label: "AI Settings", 
-      icon: "tune" 
+      icon: "tune",
+      enabled: true
     },
     { 
       path: "/azure-integrations", 
       label: "Azure Integrations", 
-      icon: "cloud"
+      icon: "cloud",
+      enabled: true
     },
     { 
       path: "/reports", 
       label: "Reports", 
-      icon: "summarize"
+      icon: "summarize",
+      enabled: true
     }
   ];
 
@@ -39,10 +44,19 @@ export default function SideNav() {
           {navItems.map((item) => (
             <li key={item.path}>
               <Link href={item.path}>
-                <a className={`flex items-center py-2 px-3 rounded-md ${location === item.path ? "bg-[#E1EFFF] text-[#0078D4]" : "text-[#9E9E9E] hover:bg-[#F5F5F5]"}`}>
+                <div className={`flex items-center py-2 px-3 rounded-md cursor-pointer ${
+                  location === item.path 
+                    ? "bg-gradient-to-r from-[#0078D4]/10 via-[#8661C5]/10 to-[#E74C84]/10 text-[#8661C5]" 
+                    : "text-[#9E9E9E] hover:bg-[#F5F5F5]"
+                }`}>
                   <span className="material-icons text-sm mr-3">{item.icon}</span>
                   <span className="text-sm font-medium">{item.label}</span>
-                </a>
+                  {!item.enabled && (
+                    <span className="ml-auto bg-[#F5F5F5] text-[#9E9E9E] text-xs px-2 py-0.5 rounded">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
               </Link>
             </li>
           ))}

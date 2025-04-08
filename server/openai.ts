@@ -2,7 +2,7 @@ import OpenAI from "openai";
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || process.env.AZURE_OPENAI_API_KEY || "sk-demo-key"
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 export interface LoanApplicantData {
@@ -38,38 +38,44 @@ export async function generateEthicalEvaluation(
   applicantData: LoanApplicantData
 ): Promise<EthicalEvaluation> {
   try {
+    // Azure AI Foundry System Prompt
+    const systemPrompt = `You are an ethical AI-powered loan approval agent for Azure AI Foundry. Your task is to analyze loan applications without bias, using only relevant financial factors.`;
+
+    // Azure AI Foundry User Prompt
+    const userPrompt = `Evaluate this loan application using both traditional and ethical frameworks:
+
+APPLICANT INFO:
+- Income: ${applicantData.income}
+- Credit Score: ${applicantData.creditScore}
+- Employment Status: ${applicantData.employmentStatus}
+- Gender: ${applicantData.gender}
+- Missed Payments: ${applicantData.missedPayments}
+- Loan Amount: ${applicantData.loanAmount}
+
+FOR TRADITIONAL EVALUATION:
+Use standard financial lending criteria like income-to-loan ratio, credit score, employment stability, payment history, and calculate risk according to industry standards. You may consider all factors provided.
+
+FOR ETHICAL EVALUATION:
+Analyze the same loan application using Azure AI Foundry's ethical framework:
+1. Focus ONLY on financial behavior patterns (payment history, debt-to-income ratio)
+2. DO NOT consider gender or any demographic attributes
+3. Evaluate ability to repay based on income stability and financial responsibility
+4. Apply consistent standards across all demographic groups
+5. Provide specific reasons for approval/denial based only on financial factors
+
+RESPONSE FORMAT: 
+Provide ONLY the ethical evaluation results in JSON format with "approved" (boolean), "reason" (string), and "analysis" (array of factor objects)`;
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant providing loan applicant summaries."
+          content: systemPrompt
         },
         {
           role: "user",
-          content: `Generate a concise, neutral summary of this loan applicant:
-Income: ${applicantData.income}
-Credit Score: ${applicantData.creditScore}
-Employment Status: ${applicantData.employmentStatus}
-Gender: ${applicantData.gender}
-Missed Payments: ${applicantData.missedPayments}
-Loan Amount: ${applicantData.loanAmount}
-
-Explicitly focus only on financial factors. Do NOT consider gender or any demographic factors in your evaluation. Base your assessment solely on income, credit score, employment stability, payment history, and loan amount relative to income. Provide a clear recommendation (Approve/Deny) with specific financial reasoning.
-
-Return your response as a JSON object in this format:
-{
-  "approved": boolean,
-  "reason": "string with brief explanation",
-  "analysis": [
-    {
-      "factor": "Credit Score",
-      "value": "the value",
-      "assessment": "assessment of this factor"
-    },
-    ...additional factors
-  ]
-}`
+          content: userPrompt
         }
       ],
       response_format: { type: "json_object" }

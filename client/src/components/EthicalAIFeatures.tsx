@@ -3,36 +3,54 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function EthicalAIFeatures() {
   const features = [
     {
-      icon: "security",
-      title: "Built-in Guardrails",
-      description: "Ethical constraints that enhance business value by expanding addressable market"
+      icon: "balance",
+      title: "Fairness in Lending",
+      description: "AI-powered evaluation that significantly reduces bias in lending decisions"
+    },
+    {
+      icon: "visibility",
+      title: "Transparent Decisions",
+      description: "Clear explanation of evaluation factors with ethical considerations"
     },
     {
       icon: "gavel",
       title: "Regulatory Compliance",
-      description: "Turn compliance requirements into competitive advantages"
+      description: "Meets financial regulations while improving equity and access"
     },
     {
-      icon: "hub",
-      title: "Integration Ready",
-      description: "Connect to existing banking systems through APIs"
+      icon: "analytics",
+      title: "Advanced Analytics",
+      description: "Comparative analysis between traditional and ethical evaluation methods"
+    },
+    {
+      icon: "security",
+      title: "Ethical Guardrails",
+      description: "Built-in protections against demographic and socioeconomic bias"
+    },
+    {
+      icon: "assignment_turned_in",
+      title: "Documentation",
+      description: "Comprehensive audit trail for all loan decisions"
     }
   ];
 
   return (
     <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-[#424242]">Azure AI Foundry Ethical Features</CardTitle>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-semibold flex items-center">
+          <div className="w-1 h-6 bg-gradient-to-b from-[#0078D4] via-[#8661C5] to-[#E74C84] mr-3 rounded-full"></div>
+          Azure AI Foundry Ethical Features
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid md:grid-cols-3 gap-4">
           {features.map((feature, index) => (
-            <div key={index} className="p-4 border border-[#E0E0E0] rounded-md">
+            <div key={index} className="p-4 border border-[#EAEAEA] rounded-md hover:shadow-sm transition-shadow">
               <div className="flex items-start">
-                <span className="material-icons text-[#0078D4] mr-3">{feature.icon}</span>
+                <span className="material-icons text-[#8661C5] mr-3">{feature.icon}</span>
                 <div>
                   <h4 className="font-medium text-[#424242] mb-1">{feature.title}</h4>
-                  <p className="text-sm text-[#9E9E9E]">{feature.description}</p>
+                  <p className="text-sm text-[#757575]">{feature.description}</p>
                 </div>
               </div>
             </div>
