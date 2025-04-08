@@ -63,6 +63,7 @@ export default function LoanEvaluation() {
   });
 
   const handleLoanSubmit = (formData: LoanApplicationData) => {
+    console.log("Submitting loan application:", formData);
     evaluateLoanMutation.mutate(formData);
   };
 

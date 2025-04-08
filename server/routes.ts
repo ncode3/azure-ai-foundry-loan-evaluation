@@ -11,6 +11,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API route for loan evaluation
   app.post("/api/evaluate-loan", async (req, res) => {
     try {
+      console.log("Received loan evaluation request:", req.body);
       const { 
         income, 
         creditScore, 
@@ -22,6 +23,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Validate inputs
       if (!income || !creditScore || !employmentStatus || !gender || !missedPayments || !loanAmount) {
+        console.log("Missing required loan application data:", { income, creditScore, employmentStatus, gender, missedPayments, loanAmount });
         return res.status(400).json({ message: "Missing required loan application data" });
       }
       
