@@ -34,8 +34,7 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const newUser: User = {
       ...insertUser,
-      id: this.nextUserId++,
-      createdAt: new Date(),
+      id: this.nextUserId++
     };
     this.users.push(newUser);
     return newUser;
@@ -102,7 +101,7 @@ export class DatabaseStorage implements IStorage {
       return user;
     } catch (err) {
       console.error("Database error in createUser:", err);
-      throw err;
+      throw err; // We need to throw here so the FallbackStorage can catch and use memory storage
     }
   }
 
@@ -147,7 +146,7 @@ export class DatabaseStorage implements IStorage {
       return loanApp;
     } catch (err) {
       console.error("Database error in createLoanApplication:", err);
-      throw err;
+      throw err; // We need to throw here so the FallbackStorage can catch and use memory storage
     }
   }
 }
@@ -165,11 +164,13 @@ class FallbackStorage implements IStorage {
 
   private async withFallback<T>(dbOperation: () => Promise<T>, memOperation: () => Promise<T>): Promise<T> {
     if (this.useMemory) {
+      console.log("Using in-memory storage (withFallback)");
       return await memOperation();
     }
 
     try {
-      return await dbOperation();
+      const result = await dbOperation();
+      return result;
     } catch (error) {
       console.log("Database operation failed, falling back to in-memory storage:", error);
       this.useMemory = true; // Once we fail, use memory for all subsequent operations
@@ -216,10 +217,19 @@ class FallbackStorage implements IStorage {
     traditionalEvaluation: any; 
     ethicalEvaluation: any; 
   }): Promise<LoanApplication> {
-    return this.withFallback(
-      () => this.dbStorage.createLoanApplication(application),
-      () => this.memStorage.createLoanApplication(application)
-    );
+    if (this.useMemory) {
+      console.log("Using in-memory storage for loan application");
+      return await this.memStorage.createLoanApplication(application);
+    }
+
+    try {
+      const result = await this.dbStorage.createLoanApplication(application);
+      return result;
+    } catch (error) {
+      console.log("Database operation failed, falling back to in-memory storage:", error);
+      this.useMemory = true; // Once we fail, use memory for all subsequent operations
+      return await this.memStorage.createLoanApplication(application);
+    }
   }
 }
 
