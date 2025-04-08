@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import azureAILogo from "../assets/azure-ai-foundry-logo.svg";
 
 export default function AppHeader() {
   return (
@@ -7,17 +8,7 @@ export default function AppHeader() {
         <Link href="/">
           <div className="flex items-center cursor-pointer">
             <div className="h-10 w-10 mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140">
-                <defs>
-                  <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#0078D4" />
-                    <stop offset="75%" stopColor="#8661C5" />
-                    <stop offset="100%" stopColor="#E74C84" />
-                  </linearGradient>
-                </defs>
-                <path d="M110 40 L150 40 C170 40 180 60 170 80 L130 80 C110 80 100 60 110 40 Z" fill="url(#logo-gradient)"/>
-                <path d="M90 60 L130 60 C140 60 145 70 140 80 L100 80 C90 80 85 70 90 60 Z" fill="url(#logo-gradient)"/>
-              </svg>
+              <img src={azureAILogo} alt="Azure AI Foundry Logo" className="h-10 w-10" />
             </div>
             <div>
               <h1 className="text-xl font-semibold text-[#424242]">Azure AI Foundry</h1>
