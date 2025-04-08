@@ -20,7 +20,7 @@ export default function TestPage() {
       
       console.log("Submitting test data:", testData);
       
-      const response = await fetch("http://localhost:5000/api/evaluate-loan", {
+      const response = await fetch("/api/evaluate-loan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(testData)
@@ -34,9 +34,9 @@ export default function TestPage() {
       console.log("Response data:", data);
       
       setResult(JSON.stringify(data, null, 2));
-    } catch (error) {
+    } catch (error: any) {
       console.error("API call failed:", error);
-      setResult(`Error: ${error.message}`);
+      setResult(`Error: ${error.message || "Unknown error"}`);
     } finally {
       setLoading(false);
     }

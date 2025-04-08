@@ -72,6 +72,11 @@ function Router() {
           <Settings />
         </Layout>
       </Route>
+      <Route path="/test">
+        <Layout>
+          <TestPage />
+        </Layout>
+      </Route>
       <Route>
         <NotFound />
       </Route>

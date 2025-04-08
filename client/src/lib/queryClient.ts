@@ -12,8 +12,8 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  // Make sure URLs work with the current server port
-  const apiUrl = url.startsWith('/') ? `http://localhost:5000${url}` : url;
+  // Use relative URLs for API requests
+  const apiUrl = url.startsWith('/') ? url : `/${url}`;
   
   console.log(`Making API request to: ${apiUrl}`);
   const res = await fetch(apiUrl, {
@@ -34,8 +34,8 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const url = queryKey[0] as string;
-    // Make sure URLs work with the current server port
-    const apiUrl = url.startsWith('/') ? `http://localhost:5000${url}` : url;
+    // Use relative URLs for queries
+    const apiUrl = url.startsWith('/') ? url : `/${url}`;
     
     console.log(`Making query to: ${apiUrl}`);
     const res = await fetch(apiUrl, {

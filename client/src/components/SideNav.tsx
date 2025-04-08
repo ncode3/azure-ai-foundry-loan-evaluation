@@ -33,6 +33,12 @@ export default function SideNav() {
       label: "Reports", 
       icon: "summarize",
       enabled: true
+    },
+    { 
+      path: "/test", 
+      label: "API Test Page", 
+      icon: "bug_report",
+      enabled: true
     }
   ];
 
