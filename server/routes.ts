@@ -42,12 +42,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate ethical evaluation using Azure AI
       const ethicalEvaluation = await generateEthicalEvaluation(applicantData);
       
-      // Store the application and evaluation results in the database
-      await storage.createLoanApplication({
-        ...applicantData,
-        traditionalEvaluation,
-        ethicalEvaluation
-      });
+      try {
+        // Try to store the application in the database, but continue even if this fails
+        await storage.createLoanApplication({
+          ...applicantData,
+          traditionalEvaluation,
+          ethicalEvaluation
+        });
+      } catch (dbError) {
+        console.error("Database error when storing loan application:", dbError);
+        // Continue processing even if database store fails
+      }
       
       // Return the evaluation results
       res.json({

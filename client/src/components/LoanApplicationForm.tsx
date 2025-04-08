@@ -1,30 +1,9 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel 
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { InfoIcon } from "lucide-react";
 import { type LoanApplicationData } from "@/pages/LoanEvaluation";
-
-const formSchema = z.object({
-  income: z.coerce.number().positive("Income must be positive").min(10000, "Income must be at least $10,000"),
-  creditScore: z.coerce.number().min(300, "Credit score must be at least 300").max(850, "Credit score cannot exceed 850"),
-  employmentStatus: z.string().min(1, "Please select employment status"),
-  gender: z.string().min(1, "Please select gender"),
-  missedPayments: z.string().min(1, "Please select missed payments"),
-  loanAmount: z.coerce.number().positive("Loan amount must be positive").min(1000, "Loan amount must be at least $1,000"),
-});
 
 interface LoanApplicationFormProps {
   onSubmit: (data: LoanApplicationData) => void;
@@ -37,20 +16,27 @@ export default function LoanApplicationForm({
   compareEnabled,
   onCompareToggle
 }: LoanApplicationFormProps) {
-  const form = useForm<LoanApplicationData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      income: 85000,
-      creditScore: 720,
-      employmentStatus: "Employed",
-      gender: "female",
-      missedPayments: "1",
-      loanAmount: 125000,
-    }
+  const [formData, setFormData] = useState<LoanApplicationData>({
+    income: 85000,
+    creditScore: 720,
+    employmentStatus: "Employed",
+    gender: "female",
+    missedPayments: "1",
+    loanAmount: 125000,
   });
 
-  const handleSubmit = (data: LoanApplicationData) => {
-    onSubmit(data);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === "income" || name === "creditScore" || name === "loanAmount" 
+        ? Number(value) 
+        : value
+    }));
+  };
+
+  const handleSubmit = () => {
+    onSubmit(formData);
   };
 
   return (
@@ -66,156 +52,121 @@ export default function LoanApplicationForm({
         </div>
       </CardHeader>
       <CardContent className="pt-6">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="income" className="text-sm font-medium text-[#424242]">
+                Annual Income ($)
+              </label>
+              <input
+                type="number"
+                id="income"
                 name="income"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#424242]">Annual Income ($)</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} className="border-[#E0E0E0] focus-visible:ring-[#0078D4]" />
-                    </FormControl>
-                  </FormItem>
-                )}
+                value={formData.income}
+                onChange={handleChange}
+                className="w-full rounded-md border border-[#E0E0E0] p-2 focus:outline-none focus:ring-2 focus:ring-[#0078D4]"
               />
+            </div>
 
-              <FormField
-                control={form.control}
+            <div className="space-y-2">
+              <label htmlFor="creditScore" className="text-sm font-medium text-[#424242]">
+                Credit Score
+              </label>
+              <input
+                type="number"
+                id="creditScore"
                 name="creditScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#424242]">Credit Score</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        min={300} 
-                        max={850} 
-                        {...field} 
-                        className="border-[#E0E0E0] focus-visible:ring-[#0078D4]" 
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                min={300}
+                max={850}
+                value={formData.creditScore}
+                onChange={handleChange}
+                className="w-full rounded-md border border-[#E0E0E0] p-2 focus:outline-none focus:ring-2 focus:ring-[#0078D4]"
               />
+            </div>
 
-              <FormField
-                control={form.control}
+            <div className="space-y-2">
+              <label htmlFor="employmentStatus" className="text-sm font-medium text-[#424242]">
+                Employment Status
+              </label>
+              <select
+                id="employmentStatus"
                 name="employmentStatus"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#424242]">Employment Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="border-[#E0E0E0] focus:ring-[#0078D4]">
-                          <SelectValue placeholder="Select employment status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Employed">Employed</SelectItem>
-                        <SelectItem value="Self-Employed">Self-Employed</SelectItem>
-                        <SelectItem value="Unemployed">Unemployed</SelectItem>
-                        <SelectItem value="Retired">Retired</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="loanAmount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#424242]">Loan Amount ($)</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} className="border-[#E0E0E0] focus-visible:ring-[#0078D4]" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#424242] flex items-center">
-                      Gender
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="ml-1 cursor-help text-[#9E9E9E]">
-                              <InfoIcon size={16} />
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs">
-                            <p className="text-xs">
-                              While gender is collected for regulatory reporting, our AI system is specifically instructed not to consider this factor in loan evaluation decisions.
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="border-[#E0E0E0] focus:ring-[#0078D4]">
-                          <SelectValue placeholder="Select gender" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="female">Female</SelectItem>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="non-binary">Non-binary</SelectItem>
-                        <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="missedPayments"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#424242]">Recent Missed Payments</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="border-[#E0E0E0] focus:ring-[#0078D4]">
-                          <SelectValue placeholder="Select missed payments" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="0">None</SelectItem>
-                        <SelectItem value="1">1</SelectItem>
-                        <SelectItem value="2">2</SelectItem>
-                        <SelectItem value="3+">3+</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <Button 
-                type="button" 
-                className="bg-[#0078D4] hover:bg-[#106EBE]"
-                onClick={() => {
-                  const values = form.getValues();
-                  handleSubmit(values);
-                }}
+                value={formData.employmentStatus}
+                onChange={handleChange}
+                className="w-full rounded-md border border-[#E0E0E0] p-2 focus:outline-none focus:ring-2 focus:ring-[#0078D4]"
               >
-                Evaluate Loan Application
-              </Button>
+                <option value="Employed">Employed</option>
+                <option value="Self-Employed">Self-Employed</option>
+                <option value="Unemployed">Unemployed</option>
+                <option value="Retired">Retired</option>
+              </select>
             </div>
-          </form>
-        </Form>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="loanAmount" className="text-sm font-medium text-[#424242]">
+                Loan Amount ($)
+              </label>
+              <input
+                type="number"
+                id="loanAmount"
+                name="loanAmount"
+                value={formData.loanAmount}
+                onChange={handleChange}
+                className="w-full rounded-md border border-[#E0E0E0] p-2 focus:outline-none focus:ring-2 focus:ring-[#0078D4]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="gender" className="text-sm font-medium text-[#424242] flex items-center">
+                Gender
+                <span className="ml-1 text-[#9E9E9E]" title="While gender is collected for regulatory reporting, our AI system is specifically instructed not to consider this factor in loan evaluation decisions.">
+                  <InfoIcon size={16} />
+                </span>
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full rounded-md border border-[#E0E0E0] p-2 focus:outline-none focus:ring-2 focus:ring-[#0078D4]"
+              >
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="non-binary">Non-binary</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="missedPayments" className="text-sm font-medium text-[#424242]">
+                Recent Missed Payments
+              </label>
+              <select
+                id="missedPayments"
+                name="missedPayments"
+                value={formData.missedPayments}
+                onChange={handleChange}
+                className="w-full rounded-md border border-[#E0E0E0] p-2 focus:outline-none focus:ring-2 focus:ring-[#0078D4]"
+              >
+                <option value="0">None</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3+">3+</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <Button 
+              onClick={handleSubmit}
+              className="bg-[#0078D4] hover:bg-[#106EBE]"
+            >
+              Evaluate Loan Application
+            </Button>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
