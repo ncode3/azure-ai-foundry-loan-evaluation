@@ -40,13 +40,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate ethical evaluation using Azure AI
       const ethicalEvaluation = await generateEthicalEvaluation(applicantData);
       
-      // Store the application and evaluation results (in-memory)
-      const loanApplication = {
+      // Store the application and evaluation results in the database
+      await storage.createLoanApplication({
         ...applicantData,
-        applicationDate: new Date(),
         traditionalEvaluation,
         ethicalEvaluation
-      };
+      });
       
       // Return the evaluation results
       res.json({
@@ -60,9 +59,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // API route to get evaluation history (placeholder - would use storage in a real app)
-  app.get("/api/evaluation-history", (req, res) => {
-    res.json([]);
+  // API route to get evaluation history from database
+  app.get("/api/evaluation-history", async (req, res) => {
+    try {
+      const evaluations = await storage.getLoanApplications();
+      res.json(evaluations);
+    } catch (error) {
+      console.error("Error fetching evaluation history:", error);
+      res.status(500).json({ message: "Error fetching evaluation history" });
+    }
   });
 
   const httpServer = createServer(app);

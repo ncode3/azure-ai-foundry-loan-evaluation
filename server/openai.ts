@@ -81,7 +81,8 @@ Provide ONLY the ethical evaluation results in JSON format with "approved" (bool
       response_format: { type: "json_object" }
     });
 
-    const result = JSON.parse(response.choices[0].message.content) as EthicalEvaluation;
+    // Parse the response content with a type assertion to handle null
+    const result = JSON.parse(response.choices[0].message.content as string) as EthicalEvaluation;
     return result;
   } catch (error) {
     console.error("Error generating ethical evaluation:", error);
