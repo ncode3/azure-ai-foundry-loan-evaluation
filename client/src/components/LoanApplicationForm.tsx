@@ -46,19 +46,10 @@ export default function LoanApplicationForm({
       gender: "female",
       missedPayments: "1",
       loanAmount: 125000,
-    },
-    mode: "onChange" // Add this to validate on change
-  });
-
-  // Monitor form state
-  console.log("Form state:", {
-    isDirty: form.formState.isDirty,
-    isValid: form.formState.isValid, 
-    errors: form.formState.errors
+    }
   });
 
   const handleSubmit = (data: LoanApplicationData) => {
-    console.log("Form submitted with data:", data);
     onSubmit(data);
   };
 
@@ -76,11 +67,7 @@ export default function LoanApplicationForm({
       </CardHeader>
       <CardContent className="pt-6">
         <Form {...form}>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            console.log("Form submitted", form.getValues());
-            form.handleSubmit(handleSubmit)(e);
-          }} className="grid md:grid-cols-2 gap-6">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -219,20 +206,6 @@ export default function LoanApplicationForm({
               <Button 
                 type="submit" 
                 className="bg-[#0078D4] hover:bg-[#106EBE]"
-                onClick={() => {
-                  console.log("Button clicked directly");
-                  const values = form.getValues();
-                  // Check if form is valid
-                  const isValid = form.formState.isValid;
-                  console.log("Form valid:", isValid);
-                  if (isValid) {
-                    console.log("Submitting directly via button click", values);
-                    handleSubmit(values);
-                  } else {
-                    console.log("Form is invalid, showing errors:", form.formState.errors);
-                    form.trigger(); // Trigger validation to show errors
-                  }
-                }}
               >
                 Evaluate Loan Application
               </Button>
