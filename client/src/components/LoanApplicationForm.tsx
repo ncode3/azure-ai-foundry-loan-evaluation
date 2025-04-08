@@ -160,8 +160,12 @@ export default function LoanApplicationForm({
 
           <div className="md:col-span-2">
             <Button 
-              onClick={handleSubmit}
-              className="bg-[#0078D4] hover:bg-[#106EBE]"
+              onClick={() => {
+                console.log("Button clicked, submitting form data:", formData);
+                handleSubmit();
+              }}
+              className="bg-[#0078D4] hover:bg-[#106EBE] cursor-pointer"
+              style={{ pointerEvents: 'auto' }}
             >
               Evaluate Loan Application
             </Button>
