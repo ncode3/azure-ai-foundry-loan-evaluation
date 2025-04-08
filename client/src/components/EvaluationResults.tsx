@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { type EvaluationResult } from "@/pages/LoanEvaluation";
+import { Check, AlertTriangle, ArrowRight } from "lucide-react";
 
 interface EvaluationResultsProps {
   traditionalEvaluation: EvaluationResult;
@@ -33,8 +34,8 @@ export default function EvaluationResults({
             <div className="border border-[#E0E0E0] rounded-lg p-4">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="font-medium text-[#424242]">Traditional Evaluation</h4>
-                <Badge variant={traditionalEvaluation.approved ? "default" : "destructive"} className={traditionalEvaluation.approved ? "bg-[#107C10]" : "bg-[#D83B01]"}>
-                  {traditionalEvaluation.approved ? "Approved" : "Caution"}
+                <Badge variant={traditionalEvaluation.approved ? "default" : "destructive"} className={traditionalEvaluation.approved ? "bg-[#107C10]" : "bg-[#D83B01] flex items-center gap-1"}>
+                  {traditionalEvaluation.approved ? <><Check className="h-3 w-3" /> Approved</> : <><AlertTriangle className="h-3 w-3" /> Denied</>}
                 </Badge>
               </div>
               
@@ -46,11 +47,33 @@ export default function EvaluationResults({
                     </strong>
                   </p>
                   
-                  <p className="mb-2">Analysis:</p>
-                  <ul className="list-disc pl-5 mb-3">
+                  <p className="mb-2 font-medium">Analysis:</p>
+                  <ul className="pl-4 mb-3 space-y-2">
                     {traditionalEvaluation.analysis.map((item, index) => (
-                      <li key={index}>
-                        {item.factor}: {item.value} ({item.assessment})
+                      <li key={index} className="flex items-start">
+                        <div className={`h-5 w-5 rounded-full flex items-center justify-center mr-2 flex-shrink-0 ${
+                          item.assessment === "Good" ? "bg-[#DFF6DD] text-[#107C10]" : 
+                          item.assessment === "Acceptable" ? "bg-[#FFF4CE] text-[#9D5D00]" : 
+                          "bg-[#FDE7E9] text-[#A80000]"
+                        }`}>
+                          {item.assessment === "Good" ? 
+                            <Check className="h-3 w-3" /> : 
+                            item.assessment === "Acceptable" ? 
+                            "!" : 
+                            <AlertTriangle className="h-3 w-3" />
+                          }
+                        </div>
+                        <div>
+                          <span className="font-medium">{item.factor}: </span>
+                          <span>{item.value} </span>
+                          <span className={`italic ${
+                            item.assessment === "Good" ? "text-[#107C10]" : 
+                            item.assessment === "Acceptable" ? "text-[#9D5D00]" : 
+                            "text-[#A80000]"
+                          }`}>
+                            ({item.assessment})
+                          </span>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -74,8 +97,8 @@ export default function EvaluationResults({
           <div className={`border-2 border-[#0078D4] rounded-lg p-4 ${!showComparison ? "md:col-span-2" : ""}`}>
             <div className="flex items-center justify-between mb-4">
               <h4 className="font-medium text-[#424242]">Azure AI Foundry Ethical Evaluation</h4>
-              <Badge variant={ethicalEvaluation.approved ? "default" : "destructive"} className={ethicalEvaluation.approved ? "bg-[#107C10]" : "bg-[#A80000]"}>
-                {ethicalEvaluation.approved ? "Approved" : "Denied"}
+              <Badge variant={ethicalEvaluation.approved ? "default" : "destructive"} className={ethicalEvaluation.approved ? "bg-[#107C10] flex items-center gap-1" : "bg-[#A80000] flex items-center gap-1"}>
+                {ethicalEvaluation.approved ? <><Check className="h-3 w-3" /> Approved</> : <><AlertTriangle className="h-3 w-3" /> Denied</>}
               </Badge>
             </div>
             
@@ -87,11 +110,20 @@ export default function EvaluationResults({
                   </strong>
                 </p>
                 
-                <p className="mb-2">Financial Analysis:</p>
-                <ul className="list-disc pl-5 mb-3">
+                <p className="mb-2 font-medium">Financial Analysis:</p>
+                <ul className="pl-4 mb-3 space-y-2">
                   {ethicalEvaluation.analysis.map((item, index) => (
-                    <li key={index}>
-                      {item.factor}: {item.value} ({item.assessment})
+                    <li key={index} className="flex items-start">
+                      <div className="h-5 w-5 rounded-full bg-[#E1EFFF] text-[#0078D4] flex items-center justify-center mr-2 flex-shrink-0">
+                        <Check className="h-3 w-3" />
+                      </div>
+                      <div>
+                        <span className="font-medium">{item.factor}: </span>
+                        <span>{typeof item.value === 'number' ? item.value : item.value} </span>
+                        <span className="italic text-[#0078D4]">
+                          ({item.comment || item.assessment})
+                        </span>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -114,11 +146,15 @@ export default function EvaluationResults({
 
         {showComparison && (
           <div className="mt-6 p-4 bg-[#F5F5F5] rounded-md">
-            <h4 className="font-medium text-[#424242] mb-2">Key Differences Explained</h4>
+            <h4 className="font-medium text-[#424242] mb-2 flex items-center gap-2">
+              <ArrowRight className="h-4 w-4 text-[#0078D4]" />
+              Key Differences Explained
+            </h4>
             <div className="text-sm text-[#424242]">
               {differencesList.map((item, index) => (
-                <p key={index} className={index > 0 ? "mt-2" : ""}>
-                  {item}
+                <p key={index} className={index > 0 ? "mt-2 flex items-start" : "flex items-start"}>
+                  {index > 0 && <ArrowRight className="h-3 w-3 mr-1 mt-1 text-[#0078D4] flex-shrink-0" />}
+                  <span>{index === 0 ? item : item.substring(2)}</span>
                 </p>
               ))}
             </div>

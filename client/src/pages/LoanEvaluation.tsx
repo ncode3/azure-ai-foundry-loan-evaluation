@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
 
 import LoanApplicationForm from "@/components/LoanApplicationForm";
 import AIPromptConfiguration from "@/components/AIPromptConfiguration";
@@ -82,28 +81,6 @@ export default function LoanEvaluation() {
         compareEnabled={compareEnabled}
         onCompareToggle={(enabled) => setCompareEnabled(enabled)}
       />
-      
-      <div className="my-4">
-        <h3 className="font-semibold mb-2">Direct API Test</h3>
-        <Button 
-          onClick={() => {
-            console.log("Direct button clicked!");
-            const testData = {
-              income: 85000,
-              creditScore: 720,
-              employmentStatus: "Employed",
-              gender: "female",
-              missedPayments: "1",
-              loanAmount: 125000
-            };
-            console.log("Submitting test data:", testData);
-            evaluateLoanMutation.mutate(testData);
-          }}
-          className="bg-green-600 hover:bg-green-700 mb-4"
-        >
-          Test API Directly (Click This)
-        </Button>
-      </div>
 
       <AIPromptConfiguration />
 

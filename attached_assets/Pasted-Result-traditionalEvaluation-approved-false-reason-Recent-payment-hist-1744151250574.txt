@@ -1,0 +1,61 @@
+Result:
+{
+  "traditionalEvaluation": {
+    "approved": false,
+    "reason": "Recent payment history suggests potential repayment difficulties.",
+    "analysis": [
+      {
+        "factor": "Credit Score",
+        "value": "720",
+        "assessment": "Good"
+      },
+      {
+        "factor": "Loan-to-Income Ratio",
+        "value": "1.47",
+        "assessment": "Acceptable"
+      },
+      {
+        "factor": "Employment",
+        "value": "Employed",
+        "assessment": "Acceptable"
+      },
+      {
+        "factor": "Missed Payments",
+        "value": "1",
+        "assessment": "Concerning"
+      },
+      {
+        "factor": "Demographic Risk",
+        "value": "Higher than average",
+        "assessment": "Statistical correlations suggest higher risk"
+      }
+    ]
+  },
+  "ethicalEvaluation": {
+    "approved": true,
+    "reason": "The applicant demonstrates strong financial responsibility with stable income and a good credit score, despite a minor history of a missed payment.",
+    "analysis": [
+      {
+        "factor": "income-to-loan ratio",
+        "value": 0.68,
+        "comment": "The applicant's income sufficiently supports the loan amount."
+      },
+      {
+        "factor": "credit score",
+        "value": 720,
+        "comment": "The credit score indicates good creditworthiness."
+      },
+      {
+        "factor": "employment status",
+        "value": "Employed",
+        "comment": "Steady employment suggests income stability."
+      },
+      {
+        "factor": "payment history",
+        "value": 1,
+        "comment": "Only one missed payment, indicating generally responsible financial behavior."
+      }
+    ]
+  },
+  "differences": "The evaluations reached different conclusions:\n- Traditional evaluation denied the loan, possibly influenced by demographic factors\n- Azure AI Foundry evaluation approved the loan based on financial factors only\n- This demonstrates how removing potential bias can identify qualified borrowers who might otherwise be rejected\n- This case shows how gender bias can affect traditional lending decisions"
+}

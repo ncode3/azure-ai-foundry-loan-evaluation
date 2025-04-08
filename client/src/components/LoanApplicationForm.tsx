@@ -165,7 +165,6 @@ export default function LoanApplicationForm({
                 handleSubmit();
               }}
               className="bg-[#0078D4] hover:bg-[#106EBE] cursor-pointer"
-              style={{ pointerEvents: 'auto' }}
             >
               Evaluate Loan Application
             </Button>
