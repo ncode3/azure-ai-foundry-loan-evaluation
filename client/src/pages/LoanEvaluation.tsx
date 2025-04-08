@@ -20,8 +20,9 @@ export interface LoanApplicationData {
 
 export interface EvaluationFactor {
   factor: string;
-  value: string;
-  assessment: string;
+  value: string | number;
+  assessment?: string;
+  comment?: string;
 }
 
 export interface EvaluationResult {

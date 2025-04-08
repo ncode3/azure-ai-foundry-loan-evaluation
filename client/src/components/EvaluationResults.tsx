@@ -121,7 +121,7 @@ export default function EvaluationResults({
                         <span className="font-medium">{item.factor}: </span>
                         <span>{typeof item.value === 'number' ? item.value : item.value} </span>
                         <span className="italic text-[#0078D4]">
-                          ({item.comment || item.assessment})
+                          {item.comment ? `(${item.comment})` : item.assessment ? `(${item.assessment})` : ''}
                         </span>
                       </div>
                     </li>

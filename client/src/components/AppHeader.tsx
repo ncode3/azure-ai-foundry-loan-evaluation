@@ -11,8 +11,8 @@ export default function AppHeader() {
               <img src={azureAILogo} alt="Azure AI Foundry Logo" className="h-10 w-10" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-[#424242]">Azure AI Foundry</h1>
-              <p className="text-sm text-[#9E9E9E]">Ethical Loan Evaluation Platform</p>
+              <h1 className="text-xl font-semibold text-[#424242]">Ethical Loan Evaluation Platform</h1>
+              <p className="text-sm text-[#9E9E9E]">Powered by Azure AI Foundry</p>
             </div>
           </div>
         </Link>
