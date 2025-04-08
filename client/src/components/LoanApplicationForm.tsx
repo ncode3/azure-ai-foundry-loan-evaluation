@@ -204,8 +204,12 @@ export default function LoanApplicationForm({
 
             <div className="md:col-span-2">
               <Button 
-                type="submit" 
+                type="button" 
                 className="bg-[#0078D4] hover:bg-[#106EBE]"
+                onClick={() => {
+                  const values = form.getValues();
+                  handleSubmit(values);
+                }}
               >
                 Evaluate Loan Application
               </Button>
