@@ -8,6 +8,8 @@ import EvaluationHistory from "@/pages/EvaluationHistory";
 import AISettings from "@/pages/AISettings";
 import AzureIntegrations from "@/pages/AzureIntegrations";
 import Reports from "@/pages/Reports";
+import Documentation from "@/pages/Documentation";
+import Settings from "@/pages/Settings";
 import AppHeader from "@/components/AppHeader";
 import SideNav from "@/components/SideNav";
 import Footer from "@/components/Footer";
@@ -57,6 +59,16 @@ function Router() {
       <Route path="/reports">
         <Layout>
           <Reports />
+        </Layout>
+      </Route>
+      <Route path="/documentation">
+        <Layout>
+          <Documentation />
+        </Layout>
+      </Route>
+      <Route path="/settings">
+        <Layout>
+          <Settings />
         </Layout>
       </Route>
       <Route>
